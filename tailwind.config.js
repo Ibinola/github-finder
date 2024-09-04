@@ -12,8 +12,8 @@ module.exports = {
 
   ],
   daisyui: {
-    themes: ["light", "dark", "cupcake", 'cyberpunk', 'lofi', 'retro'],
-    darkTheme: "light", // name of one of the included themes for dark mode
-    themeRoot: ":root", // The element that receives theme color CSS variables
+    themes: ["light", "dark", "cupcake", 'cyberpunk', 'retro', 'acid', 'bumblebee'],
+    darkTheme: "dark", // name of one of the included themes for dark mode
+    // themeRoot: ":root", // The element that receives theme color CSS variables
   },
 }

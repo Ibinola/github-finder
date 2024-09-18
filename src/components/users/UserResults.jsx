@@ -1,57 +1,46 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext } from "react";
 import loadingSpinner from "../../assets/loadingspinner.gif";
+import { GithubContext } from "../../context/GithubContext";
+import { Link } from "react-router-dom";
 
 function UserResults() {
-  const [users, setUsers] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null); // Added state for error handling
-
-  const base_url = "https://api.github.com/users";
-  const APP_TOKEN = process.env.REACT_APP_GITHUB_TOKEN;
-
-  console.log(APP_TOKEN);
-
-  async function getUsers() {
-    setLoading(true);
-    setError(null); // Reset error state before fetching
-    try {
-      const token = {
-        headers: {
-          Authorization: "Bearer " + APP_TOKEN,
-        },
-      };
-      const res = await fetch(base_url, token);
-      if (!res.ok) {
-        throw new Error("Network response was not ok");
-      }
-      const data = await res.json();
-      setUsers(data);
-    } catch (error) {
-      setError(error.message); // Set error message
-    } finally {
-      setLoading(false); // Ensure loading is set to false in finally block
-    }
-  }
-
-  useEffect(() => {
-    getUsers();
-  }, []);
+  const { users, loading, error } = useContext(GithubContext);
 
   return (
-    <div>
-      {loading && (
-        <div className="loading-spinner">
-          <img src={loadingSpinner} alt="Loading..." />
+    <div className="mx-auto">
+      <div className="card items-center">
+        <div>
+          {users.length > 0 && (
+            <p className="mb-4"> Total Results: {users.length}</p>
+          )}
+          <div className="grid grid-cols-2 gap-6">
+            {loading && (
+              <div className="loading-spinner">
+                <img src={loadingSpinner} alt="Loading..." />
+              </div>
+            )}
+
+            {error && <p>Error: {error}</p>}
+
+            {!loading &&
+              !error &&
+              users.map((user) => {
+                return (
+                  <div key={user.id}>
+                    <div className="cursor pointer">
+                      {" "}
+                      <img src={user.avatar_url} alt={user.login} />{" "}
+                      <p>{user.login}</p>
+                    </div>
+                    <Link className="btn btn-ghost btn-xs" to="/user">
+                      More Details
+                    </Link>
+                  </div>
+                );
+              })}
+          </div>
         </div>
-      )}
-      {error && <p>Error: {error}</p>} {/* Show error message if exists */}
-      {!loading && !error && (
-        <ul>
-          {users.map((user) => (
-            <li key={user.id}>{user.login}</li>
-          ))}
-        </ul>
-      )}
+      </div>
     </div>
   );
 }

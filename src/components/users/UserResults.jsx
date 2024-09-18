@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 
 function UserResults() {
   const { users, loading, error } = useContext(GithubContext);
-
+  console.log(users);
   return (
     <div className="mx-auto">
       <div className="card items-center">
@@ -32,9 +32,13 @@ function UserResults() {
                       <img src={user.avatar_url} alt={user.login} />{" "}
                       <p>{user.login}</p>
                     </div>
-                    <Link className="btn btn-ghost btn-xs" to="/user">
+                    <a
+                      className="btn btn-ghost btn-xs"
+                      href={user.html_url}
+                      target="blank"
+                    >
                       More Details
-                    </Link>
+                    </a>
                   </div>
                 );
               })}
